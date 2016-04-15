@@ -34,6 +34,9 @@ module.exports=function(){
 		else if(args[0]=='-s'){
 			cmd_parse_res['role']='server';
 		}
+		else{
+			throw new Error('No such option. Use -c for client or -s for server ');
+		}
 	}
 	return cmd_parse_res;
 };

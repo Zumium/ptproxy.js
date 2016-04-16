@@ -60,7 +60,7 @@ pt_event.once('cmethod',function(vals){
 	server_to_pt=net.createServer(function(socket){
 		var ptsock=socks.createConnection(options,function(err,pt_socket,info){
 			if(err){
-				throw err;
+				console.log(err);
 			}
 			else{
 				//PIPE everything up

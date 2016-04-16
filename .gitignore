@@ -1,0 +1,4 @@
+obfs4proxy.log
+node_modules
+client*.json
+server*.json

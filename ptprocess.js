@@ -17,7 +17,6 @@ module.exports=function(cfg){
 	pt_line_reader.on('line',function(line){
 		//处理PT进程的每一行stdout
 		var sp=line.split(' ');
-		console.log(sp);//DEBUG
 		var kw=sp[0];
 		switch(kw){
 			case 'ENV-ERROR':
@@ -30,7 +29,6 @@ module.exports=function(cfg){
 				break;
 			case 'VERSION':
 				if(sp[1]!='1'){
-					console.log(sp[1]);//DEBUG
 					ptline_parser.emit('error',new Error('PT returned invalid version: '+sp[1]));
 				}
 				break;
@@ -41,13 +39,12 @@ module.exports=function(cfg){
 				break;
 			case 'CMETHOD':
 				var vals=sp.slice(1);
-				console.log(vals);//DEBUG
 				if(vals[0]==CFG['ptname']){
 					ptline_parser.emit('cmethod',vals);
 				}
 				break;
 			case 'SMETHOD':
-				var vals=sp[1].split(' ');
+				var vals=sp.slice(1);
 				if(vals[0]==CFG['ptname']){
 					ptline_parser.emit('smethod',vals);
 				}

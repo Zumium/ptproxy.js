@@ -36,10 +36,8 @@ pt_event.on('error',function(err){
 });
 pt_event.once('cmethod',function(vals){
 	//设置Client
-	console.log(vals);//DEBUG
 	var local_host_port=vals[2].split(':');
 	var remote_host_port=CFG['server'].split(':');
-	console.log('CFG["server"]: ',CFG['server']);//DEBUG
 	var auth_username=CFG['ptargs'].slice(0,255);
 	var auth_password=CFG['ptargs'].slice(255);
 	if(auth_password==''){auth_password='\0';}
@@ -58,12 +56,10 @@ pt_event.once('cmethod',function(vals){
 			port:parseInt(remote_host_port[1])
 		       }
 	};
-	console.log('options: ',options);//DEBUG
 	//
 	server_to_pt=net.createServer(function(socket){
 		var ptsock=socks.createConnection(options,function(err,pt_socket,info){
 			if(err){
-				console.log(err);
 				throw err;
 			}
 			else{

@@ -82,7 +82,7 @@ function getEnv(CFG){
 			process.env['TOR_PT_SERVER_BINDADDR']=[CFG['ptname'],CFG['server']].join('-');
 			process.env['TOR_PT_ORPORT']=CFG['local'];
 			process.env['TOR_PT_EXTENDED_SERVER_PORT']='';
-			if(CFG['ptserveropt']!=null){
+			if(CFG['ptserveropt']!=null&&CFG['ptserveropt']!=''){
 				var sp_ptserveropt=CFG['ptserveropt'].split(';');
 				var temp_array=[];
 				sp_ptserveropt.forEach(function(kv){

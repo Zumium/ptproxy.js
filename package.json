@@ -1,0 +1,27 @@
+{
+  "name": "ptproxy.js",
+  "version": "0.0.1",
+  "description": "a tool for convenient use of obfs4",
+  "main": "ptproxy.js",
+  "dependencies": {
+    "socks": "^1.1.9"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zumium/ptproxy.js.git"
+  },
+  "keywords": [
+    "obfs4",
+    "obfuscate"
+  ],
+  "author": "Zumium <martin007323@gmail.com>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Zumium/ptproxy.js/issues"
+  },
+  "homepage": "https://github.com/Zumium/ptproxy.js#readme"
+}

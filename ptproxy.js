@@ -61,6 +61,7 @@ pt_event.once('cmethod',function(vals){
 		var ptsock=socks.createConnection(options,function(err,pt_socket,info){
 			if(err){
 				console.log(err);
+				socket.destroy();
 			}
 			else{
 				//PIPE everything up

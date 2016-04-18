@@ -11,7 +11,7 @@ try{
 }
 catch (e){
 	//打印错误信息
-	console.log(e.message);
+	console.error(e);
 	//打印用法帮助
 	console.log('usage: node ptproxy [-c|-s] [config.json]');
 	//已发生了错误，就退出程序吧
@@ -30,8 +30,8 @@ pt_event.on('log',function(msg){
 });
 pt_event.on('error',function(err){
 	//PT启动出错
-	console.log('ERROR OCCURDED!');
-	console.log(err);
+	console.error('ERROR OCCURDED!');
+	console.error(err);
 	process.exit(2);
 });
 pt_event.once('cmethod',function(vals){
@@ -60,7 +60,7 @@ pt_event.once('cmethod',function(vals){
 	server_to_pt=net.createServer(function(socket){
 		var ptsock=socks.createConnection(options,function(err,pt_socket,info){
 			if(err){
-				console.log(err);
+				console.error(err);
 				socket.destroy();
 			}
 			else{

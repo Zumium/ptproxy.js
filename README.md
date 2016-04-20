@@ -1,5 +1,5 @@
 # ptproxy.js
-A tool to help obfuscate TCP connections with obfs4
+A tool to help obfuscate TCP connections with obfs4<br>
 This is a Node.js port version of project PTProxy <https://github.com/gumblex/ptproxy/>
 ## Usage
 
@@ -41,7 +41,7 @@ Note：When the server starts successfully, it will print out `ptargs`. Copy and
 ##Dependencies
 <li>
 <ul>Node.js</ul>
-<ul>socks <github.com/JoshGlazebrook/socks></ul>
+<ul>socks (github.com/JoshGlazebrook/socks)</ul>
 </li>
 
 *Don't forget to run `npm install` command to install all dependency modules*

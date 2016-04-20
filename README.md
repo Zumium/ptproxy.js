@@ -41,7 +41,7 @@ Note：When the server starts successfully, it will print out `ptargs`. Copy and
 ##Dependencies
 <li>
 <ul>Node.js</ul>
-<ul>socks (github.com/JoshGlazebrook/socks)</ul>
+<ul>socks</ul>
 </li>
 
 *Don't forget to run `npm install` command to install all dependency modules*

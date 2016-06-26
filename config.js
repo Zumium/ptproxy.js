@@ -52,16 +52,16 @@ module.exports=function(cmd_parse_result){
 			cfg['role']=cmd_parse_result['role'];
 		}
 		//解析主机名
-		var client_hostname_port=cfg['client'].split(':');
+		var local_hostname_port=cfg['local'].split(':');
 		var server_hostname_port=cfg['server'].split(':');
 		var count=2;
 		var check=()=>{
 			count--;
 			if(count==0) resolve(cfg);
 		};
-		dns.lookup(client_hostname_port[0],(err,client_ip)=>{
+		dns.lookup(local_hostname_port[0],(err,local_ip)=>{
 			if(err) return reject(err);
-			cfg['client']=client_ip+':'+client_hostname_port[1];
+			cfg['local']=local_ip+':'+local_hostname_port[1];
 			check();
 		});
 		dns.lookup(server_hostname_port[0],(err,server_ip)=>{

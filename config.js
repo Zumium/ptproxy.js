@@ -16,8 +16,8 @@
 *   along with ptproxy.js.  If not, see <http://www.gnu.org/licenses/>.
 */
 var fs=require('fs');
-var sync=require('sync');
 var dns=require('dns');
+var Promise=require('bluebird');
 
 module.exports=function(cmd_parse_result){
 	/*
@@ -42,26 +42,32 @@ module.exports=function(cmd_parse_result){
 		"ptserveropt":"",
 		"ptproxy":""
 	};  */
-	//读配置文件
-	var cfg_data=fs.readFileSync(cmd_parse_result['cfg_path']);
-	//解析配置文件(JSON)
-	var cfg=JSON.parse(cfg_data);
-	//合并命令行解析结果
-	if(cmd_parse_result!=null){
-		cfg['role']=cmd_parse_result['role'];
-	}
-	//转换主机名为IP地址
-	//使用sync库将lookup异步方法转为同步方法
-	sync(()=>{
+	return new Promise((resolve,reject)=>{
+		//读配置文件
+		var cfg_data=fs.readFileSync(cmd_parse_result['cfg_path']);
+		//解析配置文件(JSON)
+		var cfg=JSON.parse(cfg_data);
+		//合并命令行解析结果
+		if(cmd_parse_result!=null){
+			cfg['role']=cmd_parse_result['role'];
+		}
+		//解析主机名
 		var client_hostname_port=cfg['client'].split(':');
 		var server_hostname_port=cfg['server'].split(':');
-
-		var client_ip=dns.lookup.sync(null,client_hostname_port[0])[0];
-		var server_ip=dns.lookup.sync(null,server_hostname_port[0])[0];
-
-		cfg['client']=client_ip+':'+client_hostname_port[1];
-		cfg['server']=server_ip+':'+server_hostname_port[1];
+		var count=2;
+		var check=()=>{
+			count--;
+			if(count==0) resolve(cfg);
+		};
+		dns.lookup(client_hostname_port[0],(err,client_ip)=>{
+			if(err) return reject(err);
+			cfg['client']=client_ip+':'+client_hostname_port[1];
+			check();
+		});
+		dns.lookup(server_hostname_port[0],(err,server_ip)=>{
+			if(err) return reject(err);
+			cfg['server']=server_ip+':'+server_hostname_port[1];
+			check();
+		});
 	});
-
-	return cfg;
 }

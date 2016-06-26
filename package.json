@@ -4,7 +4,8 @@
   "description": "a tool for convenient use of obfs4",
   "main": "ptproxy.js",
   "dependencies": {
-    "socks": "^1.1.9"
+    "socks": "^1.1.9",
+    "sync": "^0.2.5"
   },
   "devDependencies": {},
   "scripts": {

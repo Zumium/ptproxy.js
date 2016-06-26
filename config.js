@@ -16,6 +16,8 @@
 *   along with ptproxy.js.  If not, see <http://www.gnu.org/licenses/>.
 */
 var fs=require('fs');
+var sync=require('sync');
+var dns=require('dns');
 
 module.exports=function(cmd_parse_result){
 	/*
@@ -48,5 +50,18 @@ module.exports=function(cmd_parse_result){
 	if(cmd_parse_result!=null){
 		cfg['role']=cmd_parse_result['role'];
 	}
+	//转换主机名为IP地址
+	//使用sync库将lookup异步方法转为同步方法
+	sync(()=>{
+		var client_hostname_port=cfg['client'].split(':');
+		var server_hostname_port=cfg['server'].split(':');
+
+		var client_ip=dns.lookup.sync(null,client_hostname_port[0])[0];
+		var server_ip=dns.lookup.sync(null,server_hostname_port[0])[0];
+
+		cfg['client']=client_ip+':'+client_hostname_port[1];
+		cfg['server']=server_ip+':'+server_hostname_port[1];
+	});
+
 	return cfg;
 }

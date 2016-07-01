@@ -74,7 +74,7 @@ main_step_control.on('startpt',()=>{
 		console.error(err);
 		process.exit(2);
 	});
-	pt_event.once('cmethod',function(vals){
+	pt_event.on('cmethod',function(vals){
 		//设置Client
 		var local_host_port=vals[2].split(':');
 		var remote_host_port=CFG['server'].split(':');

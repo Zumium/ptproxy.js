@@ -98,6 +98,7 @@ main_step_control.on('startpt',()=>{
 		};
 		//
 		server_to_pt=net.createServer(function(socket){
+			//setting up relaying
 			var ptsock=socks.createConnection(options,function(err,pt_socket,info){
 				if(err){
 					console.error(err);
@@ -109,6 +110,16 @@ main_step_control.on('startpt',()=>{
 					pt_socket.pipe(socket);
 					
 					pt_socket.resume();
+
+					//handle socket error
+					socket.on('error',function(err){
+						console.error('local socket error occurd!');
+						console.error(err);
+					});
+					pt_socket.on('error',function(err){
+						console.error('local pt socket error occurd!');
+						console.error(err);
+					});
 				}
 			});	
 		});	

@@ -119,6 +119,7 @@ main_step_control.on('startpt',()=>{
 					pt_socket.on('error',function(err){
 						console.error('local pt socket error occurd!');
 						console.error(err);
+						socket.destroy(new Error('local PT socket exited with error!'));
 					});
 				}
 			});	

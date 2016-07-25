@@ -30,6 +30,8 @@ var CFG=null;
 var pt_event=null;
 //客户端转发server
 var server_to_pt=null;
+//客户端代理配置
+var pt_options=null;
 
 //解析命令行参数
 main_step_control.on('parsecmd',()=>{
@@ -81,7 +83,7 @@ main_step_control.on('startpt',()=>{
 		var auth_username=CFG['ptargs'].slice(0,255);
 		var auth_password=CFG['ptargs'].slice(255);
 		if(auth_password==''){auth_password='\0';}
-		var options={
+		pt_options={
 			proxy:{
 			      	ipaddress:local_host_port[0],
 				port:parseInt(local_host_port[1]),
@@ -96,36 +98,9 @@ main_step_control.on('startpt',()=>{
 				port:parseInt(remote_host_port[1])
 			}
 		};
-		//
-		server_to_pt=net.createServer(function(socket){
-			//setting up relaying
-			var ptsock=socks.createConnection(options,function(err,pt_socket,info){
-				if(err){
-					console.error(err);
-					socket.destroy();
-				}
-				else{
-					//PIPE everything up
-					socket.pipe(pt_socket);
-					pt_socket.pipe(socket);
-					
-					pt_socket.resume();
-
-					//handle socket error
-					socket.on('error',function(err){
-						console.error('local socket error occurd!');
-						console.error(err);
-					});
-					pt_socket.on('error',function(err){
-						console.error('local pt socket error occurd!');
-						console.error(err);
-						socket.destroy(new Error('local PT socket exited with error!'));
-					});
-				}
-			});	
-		});	
-		pt_event.emit('pt_ready');
-		
+		//start the server if server_to_pt is null
+		if(!server_to_pt)
+			main_step_control.emit('create_local_server',{startServer:true});
 	});
 	pt_event.on('smethod',function(vals){
 		//设置Server
@@ -140,11 +115,44 @@ main_step_control.on('startpt',()=>{
 		});
 		console.log('==============================');
 	});
-	pt_event.on('pt_ready',function(){
-		var host_and_port=CFG['local'].split(':');
-		server_to_pt.listen(parseInt(host_and_port[1]),host_and_port[0]);
-		console.log('server_tp_pt stared');
+});
+
+main_step_control.on('create_local_server',function(options){
+	server_to_pt=net.createServer(function(socket){
+		//setting up relaying
+		var ptsock=socks.createConnection(pt_options,function(err,pt_socket,info){
+			if(err){
+				console.error(err);
+				socket.destroy();
+			}
+			else{
+				//PIPE everything up
+				socket.pipe(pt_socket);
+				pt_socket.pipe(socket);
+
+				pt_socket.resume();
+
+				//handle socket error
+				socket.on('error',function(err){
+					console.error('local socket error occurd!');
+					console.error(err);
+				});
+				pt_socket.on('error',function(err){
+					console.error('local pt socket error occurd!');
+					console.error(err);
+					socket.destroy(new Error('local PT socket exited with error!'));
+				});
+			}
+		});
 	});
+	if(options.startServer)
+		main_step_control.emit('start_local_server');
+});
+
+main_step_control.on('start_local_server',function(){
+	var host_and_port=CFG['local'].split(':');
+	server_to_pt.listen(parseInt(host_and_port[1]),host_and_port[0]);
+	console.log('server_to_pt started');
 });
 
 //启动
